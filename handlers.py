@@ -18,6 +18,7 @@ class DotaBuffPollJob(object):
         self.api.track(settings.CHAT_ID, 104978674)
         self.api.track(settings.CHAT_ID, 31563138)
         self.api.track(settings.CHAT_ID, 87255844)
+        self.api.track(settings.CHAT_ID, 110284210)
         self.api.init()
 
     def unite(self, parts):
