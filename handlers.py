@@ -64,7 +64,7 @@ class DotaBuffPollJob(object):
 
             message = strings.make_message(s, who=strings.unite(our_guys_infos))
 
-            bot.sendMessage(job.context, u'{}\n\n - MVP - {}! Катнув, як Ісусик! (KDA: {} = {}).\n - Дно матчу - {}! (KDA: {} = {}).\n\n{}'.format(
+            bot.sendMessage(job.context, u'{}!\n\n - MVP - {}! Катнув, як Ісусик! (KDA: {} = {}).\n - Дно матчу - {}! (KDA: {} = {}).\n\n{}'.format(
                 message,
                 self.get_guy_info_from_po(top_po)[0], '/'.join(top_po.kda), top_po.get_kda_ratio(),
                 self.get_guy_info_from_po(bottom_po)[0], '/'.join(bottom_po.kda), bottom_po.get_kda_ratio(),
