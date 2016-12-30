@@ -3,7 +3,7 @@
 import settings
 import handlers
 import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Job
+from telegram.ext import Updater, Job
 
 
 logging.basicConfig(
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     # updater.dispatcher.add_handler(CommandHandler('reset', handlers.reset))
     # updater.dispatcher.add_handler(CommandHandler('cancel', handlers.reset))
 
-    updater.job_queue.put(Job(handlers.DotaBuffPollJob(), 30, repeat=True, context=settings.CHAT_ID))
+    updater.job_queue.put(Job(handlers.DotaBuffPollJob(), getattr(settings, 'POLL_INTERVAL', 30), repeat=True, context=settings.CHAT_ID))
 
     updater.start_polling()
     updater.idle()

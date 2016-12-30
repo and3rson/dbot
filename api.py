@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
 import urllib
 import urllib2
 import json
-from urlparse import urlparse, parse_qs
 from bs4 import BeautifulSoup as BS
 from log import logger
 from time import sleep
@@ -71,7 +71,7 @@ class DotaBuffAPI(Remote):
                     nickname = a.text
                 else:
                     profile_id = '?'
-                    nickname = '?'
+                    nickname = u'Анонім'
                 players[side_id].append(PlayerOccurence(
                     profile_id,
                     nickname,
@@ -161,6 +161,11 @@ class PlayerOccurence(object):
         self.hero = hero
         self.kda = kdan[0:3]
         self.nw = kdan[3]
+
+    def get_kda_ratio(self):
+        k, d, a = map(float, map(lambda x: x if x.isdigit() else '0', self.kda))
+        d = d if d > 0 else 1
+        return round((k + a) / d, 2)
 
 
 if __name__ == '__main__':
