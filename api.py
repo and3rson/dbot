@@ -165,7 +165,7 @@ class PlayerOccurence(object):
     def get_kda_ratio(self):
         k, d, a = map(float, map(lambda x: x if x.isdigit() else '0', self.kda))
         d = d if d > 0 else 1
-        return round((k + a) / d, 2)
+        return round((k + a / 2) / d, 2)
 
 
 if __name__ == '__main__':

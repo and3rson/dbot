@@ -66,13 +66,30 @@ class DotaBuffPollJob(object):
 
             # print our_guys_infos, strings.unite(our_guys_infos)
 
-            message = strings.make_message(s, who=strings.unite(our_guys_infos))
+            message = strings.make_message(s, who=strings.unite(our_guys_infos)) + u'!\n'
 
-            bot.sendMessage(job.context, u'{}!\n\n - MVP - {}! Катнув на {}, як Ісусик! (KDA: {} = {}).\n - Дно матчу - {}. Ніколи більше не пікай {}! (KDA: {} = {}).\n\n{}'.format(
-                message,
-                self.get_guy_info_from_po(top_po)[0], top_po.hero,'/'.join(top_po.kda), top_po.get_kda_ratio(),
-                self.get_guy_info_from_po(bottom_po)[0], bottom_po.hero, '/'.join(bottom_po.kda), bottom_po.get_kda_ratio(),
-                match.get_url()
+            mvp = u' - MVP - {}! Катнув на {}, як Ісусик! (KDA: {} = {}).\n'.format(
+                self.get_guy_info_from_po(top_po)[0], top_po.hero, '/'.join(top_po.kda), top_po.get_kda_ratio(),
+            )
+            if bottom_po.get_kda_ratio() < 1.25:
+                lvp = u' - Дно матчу - {}. Ніколи більше не пікай {}! (KDA: {} = {}).\n'.format(
+                    self.get_guy_info_from_po(bottom_po)[0], bottom_po.hero, '/'.join(bottom_po.kda), bottom_po.get_kda_ratio(),
+                )
+            else:
+                lvp = ''
+
+            tables = []
+            for team_id in (0, 1):
+                details = [
+                    [self.trim(member.nickname, 7), self.trim(member.hero, 7), '{}={}'.format('/'.join(member.kda), member.get_kda_ratio()), member.nw] for member in match.players[team_id]
+                ]
+                details.insert(0, ['Player', 'Hero', 'KDA', 'Net Worth'])
+                table = AsciiTable(details, ('Radiant', 'Dire')[team_id])
+                tables.append(table.table)
+            # table.inner_heading_row_border = False
+
+            bot.sendMessage(job.context, u'{}\n{}{}\n{}\n\n```\n{}\n```'.format(
+                message, mvp, lvp, match.get_url(), '\n'.join(tables)
             ), parse_mode='Markdown')
 
             # our_guys_names = [u'{} ({})'.format(po.nickname, po.hero) for po in our_guys]
