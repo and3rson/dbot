@@ -36,9 +36,13 @@ class DotaBuffPollJob(object):
 
     def get_guy_info_from_po(self, po):
         if po.profile_id in self.guys:
-            return self.guys[po.profile_id]
+            info = self.guys[po.profile_id]
         else:
-            return (po.nickname, 'm')
+            info = (po.nickname, 'm')
+
+        return info
+
+#        return (u'{} ({})'.format(info[0], po.hero), info[1])
 
     def __call__(self, bot, job):
         # logger.info('call: %s %s', bot, job)
@@ -64,10 +68,10 @@ class DotaBuffPollJob(object):
 
             message = strings.make_message(s, who=strings.unite(our_guys_infos))
 
-            bot.sendMessage(job.context, u'{}!\n\n - MVP - {}! Катнув, як Ісусик! (KDA: {} = {}).\n - Дно матчу - {}! (KDA: {} = {}).\n\n{}'.format(
+            bot.sendMessage(job.context, u'{}!\n\n - MVP - {}! Катнув на {}, як Ісусик! (KDA: {} = {}).\n - Дно матчу - {}. Ніколи більше не пікай {}! (KDA: {} = {}).\n\n{}'.format(
                 message,
-                self.get_guy_info_from_po(top_po)[0], '/'.join(top_po.kda), top_po.get_kda_ratio(),
-                self.get_guy_info_from_po(bottom_po)[0], '/'.join(bottom_po.kda), bottom_po.get_kda_ratio(),
+                self.get_guy_info_from_po(top_po)[0], top_po.hero,'/'.join(top_po.kda), top_po.get_kda_ratio(),
+                self.get_guy_info_from_po(bottom_po)[0], bottom_po.hero, '/'.join(bottom_po.kda), bottom_po.get_kda_ratio(),
                 match.get_url()
             ), parse_mode='Markdown')
 
